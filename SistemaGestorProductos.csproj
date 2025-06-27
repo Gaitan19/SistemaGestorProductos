@@ -121,6 +121,12 @@
     <Compile Include="Forms\AgregarProductoForm.Designer.cs">
       <DependentUpon>AgregarProductoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EditarOpcionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditarOpcionForm.Designer.cs">
+      <DependentUpon>EditarOpcionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,12 @@
     </Compile>
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpcionesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpcionesForm.Designer.cs">
+      <DependentUpon>OpcionesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RegistroForm.cs">
       <SubType>Form</SubType>
@@ -145,6 +157,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthService.cs" />
+    <Compile Include="Services\OpcionService.cs" />
     <Compile Include="Services\ProductoService.cs" />
     <Compile Include="SistemaGestorProductosDBDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -160,11 +173,17 @@
     <EmbeddedResource Include="Forms\AgregarProductoForm.resx">
       <DependentUpon>AgregarProductoForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditarOpcionForm.resx">
+      <DependentUpon>EditarOpcionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpcionesForm.resx">
+      <DependentUpon>OpcionesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegistroForm.resx">
       <DependentUpon>RegistroForm.cs</DependentUpon>

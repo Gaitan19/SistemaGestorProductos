@@ -53,6 +53,9 @@ namespace SistemaGestorProductos.Services
                     if (producto == null)
                         throw new ValidationException("Producto no encontrado", "ID", productoId.ToString());
 
+                    if (!producto.Estado)
+                        throw new ValidationException("El producto ya está desactivado", "Estado", "Inactivo");
+
                     producto.Estado = false;
                     context.SaveChanges();
                 }

@@ -31,7 +31,11 @@ namespace SistemaGestorProductos.Forms
             var usuario = _authService.IniciarSesion(txtUsuario.Text, txtContraseña.Text);
             if (usuario != null)
             {
-                MessageBox.Show("inicio de sesion correcto");
+
+                MainForm mainForm = new MainForm();
+                mainForm.Show();
+
+                this.Hide();
             }
             else
             {

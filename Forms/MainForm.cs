@@ -7,37 +7,40 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SistemaGestorProductos.Forms
 {
-    /// <summary>
-    /// Clase principal del formulario que gestiona los productos.
-    /// </summary>
     public partial class MainForm : Form
     {
         private ProductoService _productoService;
 
-        /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="MainForm"/>.
-        /// </summary>
         public MainForm()
         {
             InitializeComponent();
             _productoService = new ProductoService();
+            ConfigurarDataGridView();
             CargarProductos();
+            dgvProductos.CellClick += dgvProductos_CellClick;
+            cmbEstado.SelectedIndex = 0;
         }
 
-        /// <summary>
-        /// Carga la lista de productos en el DataGridView.
-        /// </summary>
+        private void ConfigurarDataGridView()
+        {
+            // Agregar columna de botones para opciones
+            DataGridViewButtonColumn btnOpciones = new DataGridViewButtonColumn();
+            btnOpciones.Name = "Opciones";
+            btnOpciones.HeaderText = "Opciones";
+            btnOpciones.Text = "Ver Opciones";
+            btnOpciones.UseColumnTextForButtonValue = true;
+            dgvProductos.Columns.Add(btnOpciones);
+        }
+
         private void CargarProductos()
         {
             var productos = _productoService.ObtenerProductos();
 
-            dgvProductos.DataSource = productos.Select(p => new
+            var productosConEstadoTexto = productos.Select(p => new
             {
                 p.Id,
                 p.Codigo,
@@ -46,27 +49,20 @@ namespace SistemaGestorProductos.Forms
                 p.Existencia,
                 Estado = p.Estado ? "Activo" : "Inactivo"
             }).ToList();
+
+            dgvProductos.DataSource = productosConEstadoTexto;
+            
         }
 
-        /// <summary>
-        /// Maneja el evento de clic del botón para agregar un nuevo producto.
-        /// </summary>
-        /// <param name="sender">El origen del evento.</param>
-        /// <param name="e">Los datos del evento.</param>
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             var form = new AgregarProductoForm();
             if (form.ShowDialog() == DialogResult.OK)
             {
-                CargarProductos();
+                CargarProductos(); // Recargar lista después de agregar
             }
         }
 
-        /// <summary>
-        /// Maneja el evento de clic del botón para filtrar productos.
-        /// </summary>
-        /// <param name="sender">El origen del evento.</param>
-        /// <param name="e">Los datos del evento.</param>
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
             bool? estado = null;
@@ -77,7 +73,8 @@ namespace SistemaGestorProductos.Forms
                 txtBuscar.Text,
                 estado
             );
-            dgvProductos.DataSource = productos.Select(p => new
+
+            var productosConEstadoTexto = productos.Select(p => new
             {
                 p.Id,
                 p.Codigo,
@@ -86,24 +83,12 @@ namespace SistemaGestorProductos.Forms
                 p.Existencia,
                 Estado = p.Estado ? "Activo" : "Inactivo"
             }).ToList();
+
+            dgvProductos.DataSource = productosConEstadoTexto;
+
+            
         }
 
-        /// <summary>
-        /// Maneja el evento de carga del formulario.
-        /// </summary>
-        /// <param name="sender">El origen del evento.</param>
-        /// <param name="e">Los datos del evento.</param>
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            // TODO: Esta línea de código carga datos en la tabla 'sistemaGestorProductosDBDataSet.Productos'. Puede moverla o eliminarla, según sea necesario.
-            this.productosTableAdapter.Fill(this.sistemaGestorProductosDBDataSet.Productos);
-        }
-
-        /// <summary>
-        /// Maneja el evento de clic del botón para eliminar un producto.
-        /// </summary>
-        /// <param name="sender">El origen del evento.</param>
-        /// <param name="e">Los datos del evento.</param>
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvProductos.SelectedRows.Count == 0)
@@ -129,6 +114,9 @@ namespace SistemaGestorProductos.Forms
                     _productoService.DesactivarProducto(productoId);
                     MessageBox.Show("Producto desactivado exitosamente",
                                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    cmbEstado.SelectedIndex = 0; 
+                    txtBuscar.Text = "";
                     CargarProductos();
                 }
                 catch (ValidationException vex)
@@ -140,6 +128,29 @@ namespace SistemaGestorProductos.Forms
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Ignorar clics en encabezados
+            if (e.RowIndex < 0) return;
+
+            // Si es la columna de opciones
+            if (e.ColumnIndex == dgvProductos.Columns["Opciones"].Index)
+            {
+                int productoId = (int)dgvProductos.Rows[e.RowIndex].Cells["Id"].Value;
+                string nombreProducto = dgvProductos.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+
+                var opcionesForm = new OpcionesForm(productoId, nombreProducto);
+                opcionesForm.ShowDialog();
+
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'sistemaGestorProductosDBDataSet.Productos' table. You can move, or remove it, as needed.
+            this.productosTableAdapter.Fill(this.sistemaGestorProductosDBDataSet.Productos);
         }
     }
 }
