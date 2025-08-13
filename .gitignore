@@ -1,0 +1,32 @@
+# Archivos de compilación
+bin/
+obj/
+
+# Configuraciones de usuario y de entorno
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos generados por Visual Studio
+.vs/
+*.VC.db
+*.VC.opendb
+
+# Archivos de caché
+*.cache
+*.log
+
+# Archivos de publicación
+*.publish.xml
+
+# Archivos de base de datos local
+*.mdf
+*.ldf
+
+# Archivos temporales y de sistema
+Thumbs.db
+Desktop.ini
+
+# Archivos de configuración local
+appsettings.Development.json
